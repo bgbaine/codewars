@@ -42,11 +42,15 @@ def fetchKataData(kata_id: str) -> str:
         return None
 
 
-def create_filename(filename: str, language: str) -> str:
+def create_directory(language: str, kata_rank: str, kata_slug: str) -> str:
+    return f"{language}/{kata_rank.replace(' ', '-')}/{kata_slug}"
+
+
+def format_filename(filename: str, language: str) -> str:
     extension: str = language_extensions.get(language.lower())
     if extension:
         filename = f"{filename}{extension}"
-    return filename 
+    return filename
 
 
 def create_directory(directory: str) -> None:
@@ -54,7 +58,7 @@ def create_directory(directory: str) -> None:
     logging.info(f"Created {directory}")
 
 
-def create_file(directory: str, filename: str, content: str='') -> None:
+def create_file(directory: str, filename: str, content: str = "") -> None:
     file_path: str = os.path.join(directory, filename)
 
     with open(file_path, "w") as file:
