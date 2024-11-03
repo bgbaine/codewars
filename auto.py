@@ -1,15 +1,17 @@
 # Description: This script fetches data from the CodeWars API and creates directories and files based on the fetched data.
 
 import time
-import logging
-from helpers import fetchUserData, fetchKataData, create_directory, create_file
-
-
-logging.basicConfig(level=logging.INFO)
+from helpers import (
+    fetchUserData,
+    fetchKataData,
+    create_filename,
+    create_directory,
+    create_file,
+)
 
 
 def main():
-    user_name = "bgbaine"
+    user_name: str = "bgbaine"
     user_response: str = fetchUserData(user_name)
     if not user_response:
         raise Exception("Failed to fetch user data from Codewars API")
@@ -24,14 +26,11 @@ def main():
             directory: str = (
                 f'{language}/{(kata_response["rank"]["name"]).replace(" ", "-")}/{kata_response["slug"]}'
             )
-            filename: str = f'{kata_response["slug"]}.py'
+            filename: str = create_filename(kata_response["slug"], language)
 
             create_directory(directory)
-            logging.info(f'Created {directory}/{kata_response["slug"]}')
-            create_file(directory, filename, kata_response["description"])
-            logging.info(f"Created {directory}/{filename}")
+            create_file(directory, filename)
             create_file(directory, "README.md", kata_response["description"])
-            logging.info(f"Created {directory}/README.md")
 
             time.sleep(1)
 
